@@ -14,12 +14,24 @@ router.get('/', (req, res, next) => {
 });
 
 router.put('/', (req, res, next) => {
-  console.log(req.body);
-  Hike.create(req.body, (err, hikes) => {
+  Hike.create(req.body, (err, createdHike) => {
+    if (err) {
+      return next(err);
+    };
+    res.status(201).json(createdHike);
+  });
+});
+
+router.delete('/:id', (req, res, next) => {
+  Hike.deleteOne({ _id: req.params.id }, (err, deletionStats) => {
     if (err) {
       return next(err) 
     };
-    res.status(200).json(hikes);
+    if (deletionStats.deletedCount == 0) {
+      res.status(404).send();
+    } else {
+      res.status(200).json(deletionStats);
+    }
   });
 });
 

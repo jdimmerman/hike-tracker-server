@@ -19,17 +19,16 @@ const router = express.Router();
 
 router.use((req, res, next) => {
   console.log(`Handling request at ${req.method} ${req.path}`);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'content-type');
   next();
 });
+router.use(routes);
 router.use((err, req, res, next) => {
   console.log(`Exception while handling request at ${req.path}, with ${err.message}`);
-  res.status(err.status || 500).json({
-    success: false,
-    error: err.message
-  });
+  res.status(err.status || 500).json({ error: err.message });
 });
-router.use(routes);
-
 app.use('/api', router);
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
