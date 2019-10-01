@@ -1,4 +1,4 @@
-import { loadavg } from "os";
+/* eslint-disable */
 
 // execute with mongo shell
 // Right now this does nothing other than error if the service isn't running
@@ -13,4 +13,4 @@ const hikeCollectionName = 'hikes';
 
 const conn = new Mongo(`${host}:${port}`);
 const hikeTrackerDb = conn.getDB(dbName);
-const hikesCollection = hikeTrackerDb.getCollection(hikeCollectionName);
+hikeTrackerDb.getCollection(hikeCollectionName);
