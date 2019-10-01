@@ -24,7 +24,7 @@ router.use((req, res, next) => {
   next();
 });
 router.use(routes);
-router.use((err, req, res) => {
+router.use((err, req, res, next) => {
   console.log(`Exception while handling request at ${req.path}, with ${err.message}`);
   res.status(err.status || 500).json({ error: err.message });
 });
