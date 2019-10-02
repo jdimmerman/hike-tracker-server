@@ -1,34 +1,13 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import routes from './routes';
+import app from './app';
 import mongoose from 'mongoose';
-import { mongoHost, mongoPort, mongoDbName} from './constants';
+import { MONGO_URL, PORT } from './constants';
 
-mongoose.connect(`mongodb://${mongoHost}:${mongoPort}/${mongoDbName}`, 
+mongoose.connect(MONGO_URL, 
   { 
     useNewUrlParser: true, 
     useUnifiedTopology: true 
 });
 
-const PORT = 8081;
-const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-const router = express.Router();
-
-router.use((req, res, next) => {
-  console.log(`Handling request at ${req.method} ${req.path}`);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'content-type');
-  next();
-});
-router.use(routes);
-router.use((err, req, res, next) => {
-  console.log(`Exception while handling request at ${req.path}, with ${err.message}`);
-  res.status(err.status || 500).json({ error: err.message });
-});
-app.use('/api', router);
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });

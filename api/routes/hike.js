@@ -22,9 +22,13 @@ router.put('/', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res, next) => {
+  const checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
+  if (!checkForHexRegExp.test(req.params.id)) {
+    return res.status(404).send();
+  }
   Hike.deleteOne({ _id: req.params.id }, (err, deletionStats) => {
     if (err) {
-      return next(err) 
+      return next(err);
     }
     if (deletionStats.deletedCount == 0) {
       res.status(404).send();
